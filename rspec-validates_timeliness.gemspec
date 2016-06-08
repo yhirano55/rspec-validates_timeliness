@@ -1,33 +1,31 @@
-# coding: utf-8
 lib = File.expand_path('../lib', __FILE__)
 $LOAD_PATH.unshift(lib) unless $LOAD_PATH.include?(lib)
-require 'rspec/validates_timeliness/version'
+require 'rspec-validates_timeliness/version'
 
-Gem::Specification.new do |spec|
-  spec.name          = "rspec-validates_timeliness"
-  spec.version       = Rspec::ValidatesTimeliness::VERSION
-  spec.authors       = ["Yoshiyuki Hirano"]
-  spec.email         = ["yhirano@aiming-inc.com"]
+Gem::Specification.new do |gem|
+  gem.platform      = Gem::Platform::RUBY
+  gem.name          = "rspec-validates_timeliness"
+  gem.version       = RSpec::ValidatesTimeliness::VERSION
+  gem.summary       = %q{Simple RSpec matchers for validates_timeliness}
+  gem.description   = %q{Simple RSpec matchers for validates_timeliness}
 
-  spec.summary       = %q{TODO: Write a short summary, because Rubygems requires one.}
-  spec.description   = %q{TODO: Write a longer description or delete this line.}
-  spec.homepage      = "TODO: Put your gem's website or public repo URL here."
-  spec.license       = "MIT"
+  gem.required_ruby_version = ">= 2.1.0"
 
-  # Prevent pushing this gem to RubyGems.org. To allow pushes either set the 'allowed_push_host'
-  # to allow pushing to a single host or delete this section to allow pushing to any host.
-  if spec.respond_to?(:metadata)
-    spec.metadata['allowed_push_host'] = "TODO: Set to 'http://mygemserver.com'"
-  else
-    raise "RubyGems 2.0 or newer is required to protect against public gem pushes."
-  end
+  gem.authors       = ["Yoshiyuki Hirano"]
+  gem.email         = ["yhirano@aiming-inc.com"]
+  gem.homepage      = "https://github.com/yhirano55/rspec-validates_timeliness"
 
-  spec.files         = `git ls-files -z`.split("\x0").reject { |f| f.match(%r{^(test|spec|features)/}) }
-  spec.bindir        = "exe"
-  spec.executables   = spec.files.grep(%r{^exe/}) { |f| File.basename(f) }
-  spec.require_paths = ["lib"]
+  gem.files         = `git ls-files`.split($/)
+  gem.executables   = gem.files.grep(%r{^bin/}) { |f| File.basename(f) }
+  gem.test_files    = gem.files.grep(%r{^(test|spec|features)/})
+  gem.require_paths = ["lib"]
 
-  spec.add_development_dependency "bundler", "~> 1.12"
-  spec.add_development_dependency "rake", "~> 10.0"
-  spec.add_development_dependency "rspec", "~> 3.0"
+  gem.add_dependency "rspec", ">= 3.0"
+  gem.add_dependency "validates_timeliness", "~> 4.0"
+  gem.add_dependency "timecop", ">= 0.8.0"
+  gem.add_dependency "activesupport",  ">= 4.0"
+
+  gem.add_development_dependency "rake", "~> 10.0"
+  gem.add_development_dependency "pry"
+  gem.add_development_dependency "activemodel", ">= 4.0"
 end
