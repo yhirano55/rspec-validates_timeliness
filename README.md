@@ -1,8 +1,13 @@
-# Rspec::ValidatesTimeliness
-
-*WARN: UNDER DEVELOPMENT*
+# RSpec::ValidatesTimeliness
 
 Simple RSpec matchers for [validates_timeliness](https://github.com/adzap/validates_timeliness)
+
+## Matchers
+
+- **validates_timeliness_of** tests usage of validates_timeliness
+- **validates_datetime** tests usage of `validates_datetime` (alias of `validates_timeliness_of`).
+- **validates_date** tests usage of `validates_date` (alias of `validates_timeliness_of`).
+- **validates_time** tests usage of `validate_time` (alias of `validates_timeliness_of`).
 
 ## Installation
 
@@ -25,22 +30,27 @@ Or install it yourself as:
 Here is model:
 
 ```ruby
-class Person < ActiveRecord::Base
-  validates_date :date_of_birth, on_or_before: -> { Date.current }
+class Person
+  include ActiveModel::model
+
+  validates_date :date_of_birth, before: lambda { 18.years.ago }
+  validates_time :breakfast_time, is_at: '7:00am'
+  validates_time :updated_at, between: ['9:00am', '5:00pm']
+
+  # validates_datetime :start_time, before: :finish_time **[CAUTION] Method symbol is not support**
+  # validates_date :created_at, on_or_after: :today      **[CAUTION] Shorthand is not support**
 end
 ```
 
 And with `rspec-validates_timeliness` we can now make simple assertions about those models:
 
 ```ruby
-require 'rails_helper'
+require 'spec_helper'
 
 describe Person, type: :model do
-  describe 'validations' do
-    it 'validate that date_of_birth on or before Date.current' do
-      expect(described_class).to validate_date(:date_of_birth).on_or_before(-> { Date.current })
-    end
-  end
+  it { is_expected.to validates_date(:date_of_birth).before { 18.years.ago.to_date } }
+  it { is_expected.to validates_time(:breakfast_time).is_at('7:00am') }
+  it { is_expected.to validates_time(:updated_at).between(['9:00am', '5:00pm']) }
 end
 ```
 
@@ -54,4 +64,4 @@ end
 
 ## Changelog
 
-*Nothing (under development)*
+* Release 0.1.0 (Jun 12, 2016)
