@@ -4,10 +4,9 @@ Simple RSpec matchers for [validates_timeliness](https://github.com/adzap/valida
 
 ## Matchers
 
-- **validates_timeliness_of** tests usage of validates_timeliness
-- **validates_datetime** tests usage of `validates_datetime` (alias of `validates_timeliness_of`).
-- **validates_date** tests usage of `validates_date` (alias of `validates_timeliness_of`).
-- **validates_time** tests usage of `validate_time` (alias of `validates_timeliness_of`).
+- **validates_datetime** tests usage of validates_timeliness's `validates_datetime`.
+- **validates_date** tests usage of validates_timeliness's `validates_date`.
+- **validates_time** tests usage of validates_timeliness's `validate_time`.
 
 ## Installation
 
@@ -37,8 +36,8 @@ class Person
   validates_time :breakfast_time, is_at: '7:00am'
   validates_time :updated_at, between: ['9:00am', '5:00pm']
 
-  # validates_datetime :start_time, before: :finish_time **[CAUTION] Method symbol is not support**
-  # validates_date :created_at, on_or_after: :today      **[CAUTION] Shorthand is not support**
+  # validates_datetime :start_time, before: :finish_time **[NOT SUPPORT] Method symbol
+  # validates_date :created_at, on_or_after: :today      **[NOT SUPPORT] Shorthand
 end
 ```
 
@@ -48,9 +47,11 @@ And with `rspec-validates_timeliness` we can now make simple assertions about th
 require 'spec_helper'
 
 describe Person, type: :model do
-  it { is_expected.to validates_date(:date_of_birth).before { 18.years.ago.to_date } }
+  it { is_expected.to validates_date(:date_of_birth).before(lambda { 18.years.ago }) }
+  it { is_expected.to validates_date(:date_of_birth).before { 18.years.ago } } # The same as previous example
   it { is_expected.to validates_time(:breakfast_time).is_at('7:00am') }
   it { is_expected.to validates_time(:updated_at).between(['9:00am', '5:00pm']) }
+  it { is_expected.to validates_time(:updated_at).on_or_after('9:00am').on_or_before('5:00pm') } # The same as previous example
 end
 ```
 
