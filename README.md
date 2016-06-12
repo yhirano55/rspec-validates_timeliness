@@ -65,4 +65,8 @@ end
 
 ## Changelog
 
-* Release 0.1.0 (Jun 12, 2016)
+#### Release 0.1.1 (Jun 13, 2016)
+
+* Fix to optimize expected values.
+
+#### Release 0.1.0 (Jun 12, 2016)
