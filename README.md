@@ -1,4 +1,4 @@
-# RSpec::ValidatesTimeliness
+# RSpec::ValidatesTimeliness [![Build Status](https://travis-ci.org/yhirano55/rspec-validates_timeliness.svg?branch=master)](https://travis-ci.org/yhirano55/rspec-validates_timeliness)
 
 Simple RSpec matchers for [validates_timeliness](https://github.com/adzap/validates_timeliness)
 
