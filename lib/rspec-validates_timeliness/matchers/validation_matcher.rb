@@ -1,13 +1,5 @@
 module RSpec::ValidatesTimeliness
   module Matchers
-    def validates_timeliness_of(attr_name)
-      ValidationMatcher.new(attr_name)
-    end
-
-    alias validates_date validates_timeliness_of
-    alias validates_time validates_timeliness_of
-    alias validates_datetime validates_timeliness_of
-
     class ValidationMatcher
       attr_reader :description
 
@@ -68,7 +60,7 @@ module RSpec::ValidatesTimeliness
 
       private
 
-      attr_reader :attr_name, :options, :subject
+      attr_reader :attr_name, :options, :subject, :type
 
       def base_description
         "validate that :#{attr_name} must be"
@@ -93,7 +85,7 @@ module RSpec::ValidatesTimeliness
 
       def is_at_correct?
         run_correct do
-          value = ExpectedValue.new(options[:is_at])
+          value = ExpectedValue.new(options[:is_at], type)
           description << "at #{value.equal}"
           valid?(value.equal) && invalid?(value.over) && invalid?(value.under)
         end
@@ -101,7 +93,7 @@ module RSpec::ValidatesTimeliness
 
       def after_correct?
         run_correct do
-          value = ExpectedValue.new(options[:after])
+          value = ExpectedValue.new(options[:after], type)
           description << "after #{value.equal}"
           valid?(value.over) && invalid?(value.equal) && invalid?(value.under)
         end
@@ -109,7 +101,7 @@ module RSpec::ValidatesTimeliness
 
       def on_or_after_correct?
         run_correct do
-          value = ExpectedValue.new(options[:on_or_after])
+          value = ExpectedValue.new(options[:on_or_after], type)
           description << "on or after #{value.equal}"
           valid?(value.equal) && valid?(value.over) && invalid?(value.under)
         end
@@ -117,7 +109,7 @@ module RSpec::ValidatesTimeliness
 
       def before_correct?
         run_correct do
-          value = ExpectedValue.new(options[:before])
+          value = ExpectedValue.new(options[:before], type)
           description << "before #{value.equal}"
           valid?(value.under) && invalid?(value.equal) && invalid?(value.over)
         end
@@ -125,7 +117,7 @@ module RSpec::ValidatesTimeliness
 
       def on_or_before_correct?
         run_correct do
-          value = ExpectedValue.new(options[:on_or_before])
+          value = ExpectedValue.new(options[:on_or_before], type)
           description << "on or before #{value.equal}"
           valid?(value.equal) && valid?(value.under) && invalid?(value.over)
         end
@@ -133,6 +125,10 @@ module RSpec::ValidatesTimeliness
 
       def validator_proxy
         @validator_proxy ||= ValidatorProxy.new(subject, attr_name)
+      end
+
+      def type
+        fail NotImplementedError
       end
 
       delegate :valid?, to: :validator_proxy
