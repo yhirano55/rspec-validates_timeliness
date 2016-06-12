@@ -1,13 +1,5 @@
 module RSpec::ValidatesTimeliness
   module Matchers
-    def validates_timeliness_of(attr_name)
-      ValidationMatcher.new(attr_name)
-    end
-
-    alias validates_date validates_timeliness_of
-    alias validates_time validates_timeliness_of
-    alias validates_datetime validates_timeliness_of
-
     class ValidationMatcher
       attr_reader :description
 
