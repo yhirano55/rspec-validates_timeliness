@@ -5,6 +5,11 @@ module RSpec::ValidatesTimeliness
     end
 
     class ValidatesDateMatcher < ValidationMatcher
+      private
+
+      def type
+        :date
+      end
     end
   end
 end

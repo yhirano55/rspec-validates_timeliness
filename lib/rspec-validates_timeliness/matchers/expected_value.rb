@@ -1,8 +1,8 @@
 module RSpec::ValidatesTimeliness
   module Matchers
     class ExpectedValue
-      def initialize(value)
-        @value = evaluate(value)
+      def initialize(value, type)
+        @value = evaluate(value, type)
       end
 
       def equal
@@ -31,11 +31,12 @@ module RSpec::ValidatesTimeliness
 
       attr_reader :value
 
-      def evaluate(value)
+      def evaluate(value, type)
         case value
-        when Proc then value.call
-        when Time, DateTime, Date then value
-        when String then value.to_time
+        when Proc
+          value.call.try("to_#{type}")
+        when Time, DateTime, Date, String
+          value.try("to_#{type}")
         else nil
         end
       end
