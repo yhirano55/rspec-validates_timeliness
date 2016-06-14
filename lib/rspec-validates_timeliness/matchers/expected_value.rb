@@ -37,8 +37,16 @@ module RSpec::ValidatesTimeliness
           value.call.try("to_#{type}")
         when Time, DateTime, Date, String
           value.try("to_#{type}")
+        when Symbol
+          if restriction_shorthand?(value)
+            evaluate(ValidatesTimeliness.restriction_shorthand_symbols[value], type)
+          end
         else nil
         end
+      end
+
+      def restriction_shorthand?(value)
+        ValidatesTimeliness.restriction_shorthand_symbols.keys.include?(value)
       end
     end
   end
