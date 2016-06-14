@@ -105,6 +105,21 @@ describe RSpec::ValidatesTimeliness::Matchers::ExpectedValue do
       it_behaves_like 'exactly value'
     end
 
+    context 'value is kind of Symbol' do
+      context 'when value is restriction shorthand' do
+        let(:value) { :today }
+        let(:result) { ValidatesTimeliness.restriction_shorthand_symbols[value].call.try(:"to_#{type}") }
+
+        it { is_expected.to eq result }
+      end
+
+      context 'when value is not restriction shorthand' do
+        let(:value) { :foobar }
+
+        it { is_expected.to be_nil }
+      end
+    end
+
     context 'value is not kind of Proc, Time, DateTime, Date' do
       let(:value) { 12345 }
 
